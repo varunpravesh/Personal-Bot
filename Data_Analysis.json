@@ -11,10 +11,7 @@
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2,
-      "position": [
-        272,
-        224
-      ],
+      "position": [272, 224],
       "id": "c60806fc-2f8e-47e4-b464-e3d52a451c9f",
       "name": "AI Agent"
     },
@@ -26,10 +23,7 @@
       },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
-      "position": [
-        352,
-        448
-      ],
+      "position": [352, 448],
       "id": "d07999bf-ea2b-41ec-8333-787bd448c0b0",
       "name": "Simple Memory"
     },
@@ -37,10 +31,8 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
-          "mode": "list",
-          "cachedResultName": "ExpenseTracking",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+          "value": "GOOGLE_SHEET_ID_PLACEHOLDER",
+          "mode": "list"
         },
         "sheetName": {
           "__rl": true,
@@ -51,15 +43,12 @@
       },
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.6,
-      "position": [
-        528,
-        448
-      ],
+      "position": [528, 448],
       "id": "8fe4371c-18eb-47fc-af21-cb8228d1d1a1",
       "name": "readSheets",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "OXvemS2ZQo2R3CDm",
+          "id": "GOOGLE_SHEETS_CREDENTIAL_ID_PLACEHOLDER",
           "name": "Google Sheets account"
         }
       }
@@ -71,15 +60,12 @@
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
       "typeVersion": 1,
-      "position": [
-        -48,
-        448
-      ],
+      "position": [-48, 448],
       "id": "28a1987e-0a26-460c-ae0c-1a430b69b116",
       "name": "Azure OpenAI Chat Model",
       "credentials": {
         "azureOpenAiApi": {
-          "id": "6H4SB1cfFW6KOCHR",
+          "id": "AZURE_OPENAI_CREDENTIAL_ID_PLACEHOLDER",
           "name": "Azure Open AI account"
         }
       }
@@ -88,21 +74,14 @@
       "parameters": {
         "workflowInputs": {
           "values": [
-            {
-              "name": "ChatID"
-            },
-            {
-              "name": "userRequest"
-            }
+            { "name": "ChatID" },
+            { "name": "userRequest" }
           ]
         }
       },
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
-      "position": [
-        32,
-        224
-      ],
+      "position": [32, 224],
       "id": "4a3d0ee9-fa12-43b8-9ef3-26aaf62988d3",
       "name": "When Executed by Another Workflow"
     },
@@ -115,10 +94,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        0,
-        0
-      ],
+      "position": [0, 0],
       "id": "6d1117f0-e881-425e-82c3-52340d11f0a1",
       "name": "Sticky Note"
     },
@@ -129,15 +105,12 @@
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
-      "position": [
-        160,
-        448
-      ],
+      "position": [160, 448],
       "id": "f5d56e6d-ae98-4fe1-bf9c-6f04f62896ab",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "NttQhhm7UNB0B1N8",
+          "id": "GOOGLE_GEMINI_CREDENTIAL_ID_PLACEHOLDER",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -147,63 +120,30 @@
   "connections": {
     "Simple Memory": {
       "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
+        [{ "node": "AI Agent", "type": "ai_memory", "index": 0 }]
       ]
     },
     "readSheets": {
       "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
+        [{ "node": "AI Agent", "type": "ai_tool", "index": 0 }]
       ]
     },
-    "Azure OpenAI Chat Model": {
-      "ai_languageModel": [
-        []
-      ]
-    },
+    "Azure OpenAI Chat Model": { "ai_languageModel": [[]] },
     "When Executed by Another Workflow": {
       "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "AI Agent", "type": "main", "index": 0 }]
       ]
     },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
+        [{ "node": "AI Agent", "type": "ai_languageModel", "index": 0 }]
       ]
     }
   },
   "active": false,
-  "settings": {
-    "executionOrder": "v1"
-  },
+  "settings": { "executionOrder": "v1" },
   "versionId": "5338b463-c16a-4c93-9b7b-0399a8b76755",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
-  },
+  "meta": { "templateCredsSetupCompleted": true },
   "id": "8Ctd3YCnO26jsbKw",
   "tags": []
 }
