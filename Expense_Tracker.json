@@ -6,7 +6,7 @@
         "promptType": "define",
         "text": "={{ $('Telegram Trigger').item.json.message.text ?? $json.content ?? $('Transcribe').item.json.text }}",
         "options": {
-          "systemMessage": "=### 🧾 Role: Expense Tracking Assistant + Friendly Chatbot\n\nYou are an Expense Tracking Assistant with a fun and engaging personality. Your primary role is to help users record their daily expenses and generate insightful reports, while also keeping the conversation light, friendly, and enjoyable.\n\n---\n\n### 🎯 Core Responsibilities\n\n#### 1. Expense Recording\n\nIf the user shares expenses (e.g., \"Apples 300\" or \"Tea 100, Burger 250\"), do the following:\n\n* Step 1: Understand the message. If it's unclear, ask the user to resend it in a clearer format.\n\n* Step 2: Translate the input into English if it's in Tamil (e.g., from {{ $json.text }}).\n\n* Step 3: Confirm the extracted items, date, category, sub-category, and amount with the user. Example:\n\n  > Got it! You spent 300 on Apples today (Category: Groceries, Sub-category: Fruits). Shall I save this?\n\n* Step 4: If the user agrees, call dataEntryTool, passing the expense details as an array:\n\n  ['Apples 300', 'Mangoes 250']\n\n  In case there's a single input then make it as a single element array:\n  Example input: Fried Rice 200 → ['Fried Rice 200']\n\n  Always ensure that the output is passed as an array.\n\n* Step 5: If the user wants to make changes, help them edit and reconfirm before proceeding.\n\n* Step 6: Once the user has made the changes, call the dataEntryTool to update the database.\n\n---\n\n#### 2. Expense Report Generation\n\nIf the user asks for a report (e.g., \"Show me my weekly expenses\" or \"How much did I spend on food last month?\"):\n\n* Call the dataAnalysisTool by passing the userText as an input.\n\n* Also let the user know that their report/answer is being compiled and will be available soon.\n\n---\n\n#### 3. User Preferences and Personal Info\n\nWhen the user refers to something personal (e.g., \"What is my name?\",or \"Give me a recipe for my favourite food\"):\n\n* Access the document by calling the getPreferences tool. This document consists of all the personal preferences of the user. \n\n* If you don't find any relevant information in the document, ask the user what it is and record the new information using the updatePreferences tool.\n\n* Automatically detect and update any personal info or pereference that the user may provide.\n\n#### 4. Managing Calendar\n\n* Any requests regarding the calendar events will be handled by the calendarAgent tool.\n\n* The arguments for this tool will be today's date and the user's request.\n\n---\n\n### 🧠 Additional Guidelines\n\n* If the user message is unclear, politely ask them to rephrase it.\n* Always be friendly, helpful, and natural. Use humor, emojis, or personal touches to keep the experience warm and delightful.\n* Today's date is: {{ $today }}\n* Your memory allows you to recall previous messages—use it wisely when confirming or referencing past entries.\n* No need to highlight or bold anything. You can use emojis to make the responses more engaging.\n"
+          "systemMessage": "=### \ud83e\uddfe Role: Expense Tracking Assistant + Friendly Chatbot\n\nYou are an Expense Tracking Assistant with a fun and engaging personality. Your primary role is to help users record their daily expenses and generate insightful reports, while also keeping the conversation light, friendly, and enjoyable.\n\n---\n\n### \ud83c\udfaf Core Responsibilities\n\n#### 1. Expense Recording\n\nIf the user shares expenses (e.g., \"Apples 300\" or \"Tea 100, Burger 250\"), do the following:\n\n* Step 1: Understand the message. If it's unclear, ask the user to resend it in a clearer format.\n\n* Step 2: Translate the input into English if it's in Tamil (e.g., from {{ $json.text }}).\n\n* Step 3: Confirm the extracted items, date, category, sub-category, and amount with the user. Example:\n\n  > Got it! You spent 300 on Apples today (Category: Groceries, Sub-category: Fruits). Shall I save this?\n\n* Step 4: If the user agrees, call dataEntryTool, passing the expense details as an array:\n\n  ['Apples 300', 'Mangoes 250']\n\n  In case there's a single input then make it as a single element array:\n  Example input: Fried Rice 200 \u2192 ['Fried Rice 200']\n\n  Always ensure that the output is passed as an array.\n\n* Step 5: If the user wants to make changes, help them edit and reconfirm before proceeding.\n\n* Step 6: Once the user has made the changes, call the dataEntryTool to update the database.\n\n---\n\n#### 2. Expense Report Generation\n\nIf the user asks for a report (e.g., \"Show me my weekly expenses\" or \"How much did I spend on food last month?\"):\n\n* Call the dataAnalysisTool by passing the userText as an input.\n\n* Also let the user know that their report/answer is being compiled and will be available soon.\n\n---\n\n#### 3. User Preferences and Personal Info\n\nWhen the user refers to something personal (e.g., \"What is my name?\",or \"Give me a recipe for my favourite food\"):\n\n* Access the document by calling the getPreferences tool. This document consists of all the personal preferences of the user. \n\n* If you don't find any relevant information in the document, ask the user what it is and record the new information using the updatePreferences tool.\n\n* Automatically detect and update any personal info or pereference that the user may provide.\n\n#### 4. Managing Calendar\n\n* Any requests regarding the calendar events will be handled by the calendarAgent tool.\n\n* The arguments for this tool will be today's date and the user's request.\n\n---\n\n### \ud83e\udde0 Additional Guidelines\n\n* If the user message is unclear, politely ask them to rephrase it.\n* Always be friendly, helpful, and natural. Use humor, emojis, or personal touches to keep the experience warm and delightful.\n* Today's date is: {{ $today }}\n* Your memory allows you to recall previous messages\u2014use it wisely when confirming or referencing past entries.\n* No need to highlight or bold anything. You can use emojis to make the responses more engaging.\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -15,7 +15,7 @@
         1984,
         240
       ],
-      "id": "d9176251-65d5-49cc-8f8c-7eadeb48ff29",
+      "id": "<REDACTED>",
       "name": "AI Agent",
       "retryOnFail": true,
       "maxTries": 2,
@@ -25,7 +25,7 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "Cw27gbrx6qeCQGds",
+          "value": "<REDACTED>",
           "mode": "list",
           "cachedResultName": "Data_Entry"
         },
@@ -48,7 +48,7 @@
               "type": "string"
             },
             {
-              "id": "UserText",
+              "id": "<REDACTED>",
               "displayName": "UserText",
               "required": false,
               "defaultMatch": false,
@@ -77,14 +77,14 @@
         1728,
         544
       ],
-      "id": "06818dde-f187-4de7-9503-371604338931",
+      "id": "<REDACTED>",
       "name": "dataEntryTool"
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "8Ctd3YCnO26jsbKw",
+          "value": "<REDACTED>",
           "mode": "list",
           "cachedResultName": "Data_Analysis"
         },
@@ -95,7 +95,7 @@
             "userRequest": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('userRequest', ``, 'string') }}"
           },
           "matchingColumns": [
-            "userText"
+            "<REDACTED>"
           ],
           "schema": [
             {
@@ -109,7 +109,7 @@
               "removed": false
             },
             {
-              "id": "userRequest",
+              "id": "<REDACTED>",
               "displayName": "userRequest",
               "required": false,
               "defaultMatch": false,
@@ -129,7 +129,7 @@
         1888,
         544
       ],
-      "id": "c8bee3ef-1ddc-45f7-99d5-1d907bf84ae3",
+      "id": "<REDACTED>",
       "name": "dataAnalysisTool"
     },
     {
@@ -153,7 +153,7 @@
                       "operation": "exists",
                       "singleValue": true
                     },
-                    "id": "105bb9b5-c1e8-4acc-a631-dc81146b503c"
+                    "id": "<REDACTED>"
                   }
                 ],
                 "combinator": "and"
@@ -171,7 +171,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "7bfad959-d662-4f3a-a623-1f6dc540345e",
+                    "id": "<REDACTED>",
                     "leftValue": "={{ $json.message.text }}",
                     "rightValue": "",
                     "operator": {
@@ -196,7 +196,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "fbc1fc71-2322-4ac6-a5cf-a4ed7ab5a6b2",
+                    "id": "<REDACTED>",
                     "leftValue": "={{ $json.message.document.thumbnail.file_id }}",
                     "rightValue": "",
                     "operator": {
@@ -221,7 +221,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "4fd97f18-6a5d-406a-a461-2e5b2ec67fdd",
+                    "id": "<REDACTED>",
                     "leftValue": "={{ $json.message.sticker.set_name }}",
                     "rightValue": "Sticker",
                     "operator": {
@@ -246,7 +246,7 @@
         240,
         240
       ],
-      "id": "1e3dbcd0-d0e6-49c9-b293-9f5fbd1fa6e3",
+      "id": "<REDACTED>",
       "name": "Switch"
     },
     {
@@ -261,11 +261,11 @@
         1040,
         64
       ],
-      "id": "f550c4c0-ab63-4d73-9f7e-55f52cff57ad",
+      "id": "<REDACTED>",
       "name": "Transcribe",
       "credentials": {
         "openAiApi": {
-          "id": "5mAhOpevxVoT2id5",
+          "id": "<REDACTED>",
           "name": "OpenAi account"
         }
       }
@@ -282,7 +282,7 @@
         1568,
         544
       ],
-      "id": "7c269d86-4977-4ad6-8026-de2b658a163f",
+      "id": "<REDACTED>",
       "name": "Simple Memory"
     },
     {
@@ -296,11 +296,11 @@
         2208,
         1024
       ],
-      "id": "b0030011-c79e-4e75-a049-79b0292aa902",
+      "id": "<REDACTED>",
       "name": "Azure OpenAI Chat Model",
       "credentials": {
         "azureOpenAiApi": {
-          "id": "6H4SB1cfFW6KOCHR",
+          "id": "<REDACTED>",
           "name": "Azure Open AI account"
         }
       }
@@ -320,12 +320,12 @@
         2912,
         112
       ],
-      "id": "a7c47a3b-2906-41f1-b302-610787f63fd4",
+      "id": "<REDACTED>",
       "name": "sendMessage",
-      "webhookId": "507d367a-9817-4825-afcc-bc02d505a03e",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -344,12 +344,12 @@
         2912,
         368
       ],
-      "id": "b5d23ca9-1c95-4d34-8c4a-65d165cbb4c4",
+      "id": "<REDACTED>",
       "name": "sendError",
-      "webhookId": "507d367a-9817-4825-afcc-bc02d505a03e",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -366,12 +366,12 @@
         848,
         64
       ],
-      "id": "c7a06d36-75fd-414c-828d-af276536f11f",
+      "id": "<REDACTED>",
       "name": "audioDownload",
-      "webhookId": "18351a8c-03b8-434e-bb44-431ae5f1703c",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -388,12 +388,12 @@
         704,
         368
       ],
-      "id": "26714a50-0510-4aa1-81ff-bd696abb9eb9",
+      "id": "<REDACTED>",
       "name": "imageDownload",
-      "webhookId": "18351a8c-03b8-434e-bb44-431ae5f1703c",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -404,7 +404,7 @@
         "operation": "analyze",
         "modelId": {
           "__rl": true,
-          "value": "gpt-4o-mini",
+          "value": "<REDACTED>",
           "mode": "list",
           "cachedResultName": "GPT-4O-MINI"
         },
@@ -418,11 +418,11 @@
         1104,
         368
       ],
-      "id": "b5cc7785-98ca-4e99-b88f-8939cd8c884b",
+      "id": "<REDACTED>",
       "name": "analyzeImage",
       "credentials": {
         "openAiApi": {
-          "id": "5mAhOpevxVoT2id5",
+          "id": "<REDACTED>",
           "name": "OpenAi account"
         }
       }
@@ -438,7 +438,7 @@
         912,
         368
       ],
-      "id": "6bfd7731-12f0-4c0e-b7a5-81df1d063c7b",
+      "id": "<REDACTED>",
       "name": "convertImage"
     },
     {
@@ -449,24 +449,24 @@
         1008,
         608
       ],
-      "id": "9d0d10ca-e212-42c1-919e-a3773486ff45",
+      "id": "<REDACTED>",
       "name": "Limit"
     },
     {
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
+          "value": "<REDACTED>",
           "mode": "list",
           "cachedResultName": "ExpenseTracking",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+          "cachedResultUrl": "<REDACTED_URL>"
         },
         "sheetName": {
           "__rl": true,
           "value": 510621147,
           "mode": "list",
           "cachedResultName": "Stickers",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit#gid=510621147"
+          "cachedResultUrl": "<REDACTED_URL>"
         },
         "options": {}
       },
@@ -476,11 +476,11 @@
         704,
         608
       ],
-      "id": "f3ac5b45-e338-4d8b-af14-02d941baf605",
+      "id": "<REDACTED>",
       "name": "fetchStickerList",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "OXvemS2ZQo2R3CDm",
+          "id": "<REDACTED>",
           "name": "Google Sheets account"
         }
       }
@@ -495,7 +495,7 @@
         864,
         608
       ],
-      "id": "20bbfb3f-2367-4db4-84c5-7fc1ca3e06d5",
+      "id": "<REDACTED>",
       "name": "Randomize"
     },
     {
@@ -511,12 +511,12 @@
         1152,
         608
       ],
-      "id": "b07ef8b6-3361-4ffb-b27d-fd5a29073cdb",
+      "id": "<REDACTED>",
       "name": "sendSticker",
-      "webhookId": "9a5a25ba-b9f6-48b1-b401-f26a243bac21",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -534,7 +534,7 @@
         0,
         0
       ],
-      "id": "917e763c-672e-4695-a233-464a16659329",
+      "id": "<REDACTED>",
       "name": "Sticky Note"
     },
     {
@@ -547,11 +547,11 @@
         2144,
         544
       ],
-      "id": "a5c9c01f-9c34-4fa0-a2f4-bbe208b49933",
+      "id": "<REDACTED>",
       "name": "SerpAPI",
       "credentials": {
         "serpApi": {
-          "id": "ZAcpVlBCY5GnSrxy",
+          "id": "<REDACTED>",
           "name": "SerpAPI account"
         }
       }
@@ -559,7 +559,7 @@
     {
       "parameters": {
         "operation": "get",
-        "documentURL": "199egB2nKh2TjXuc4vm3Ty7Ytz_A-xhJjdx1vvXooD54"
+        "documentURL": "<REDACTED>"
       },
       "type": "n8n-nodes-base.googleDocsTool",
       "typeVersion": 2,
@@ -567,11 +567,11 @@
         2288,
         544
       ],
-      "id": "ca9db729-3641-4452-bf2a-7db08d79b415",
+      "id": "<REDACTED>",
       "name": "getPreferences",
       "credentials": {
         "googleDocsOAuth2Api": {
-          "id": "fsjJuaa6TF218oDT",
+          "id": "<REDACTED>",
           "name": "Google Docs account"
         }
       }
@@ -579,7 +579,7 @@
     {
       "parameters": {
         "operation": "update",
-        "documentURL": "199egB2nKh2TjXuc4vm3Ty7Ytz_A-xhJjdx1vvXooD54",
+        "documentURL": "<REDACTED>",
         "actionsUi": {
           "actionFields": [
             {
@@ -596,11 +596,11 @@
         2464,
         544
       ],
-      "id": "d4bb8dc0-c3fb-41e2-85d0-9c5fbd2478b0",
+      "id": "<REDACTED>",
       "name": "updatePreferences",
       "credentials": {
         "googleDocsOAuth2Api": {
-          "id": "fsjJuaa6TF218oDT",
+          "id": "<REDACTED>",
           "name": "Google Docs account"
         }
       }
@@ -613,7 +613,7 @@
         2032,
         544
       ],
-      "id": "094b79c6-4a2e-4e76-acec-b75e8fabba89",
+      "id": "<REDACTED>",
       "name": "Wikipedia"
     },
     {
@@ -624,14 +624,14 @@
         2624,
         544
       ],
-      "id": "8f8673fc-d8ee-441e-b5ba-5fed665c75a8",
+      "id": "<REDACTED>",
       "name": "Calculator"
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "pJO20wgsoBr55MzP",
+          "value": "<REDACTED>",
           "mode": "list",
           "cachedResultName": "calendarAgent"
         },
@@ -644,7 +644,7 @@
           "matchingColumns": [],
           "schema": [
             {
-              "id": "userText",
+              "id": "<REDACTED>",
               "displayName": "userText",
               "required": false,
               "defaultMatch": false,
@@ -672,13 +672,13 @@
         2768,
         544
       ],
-      "id": "dacbc350-dbb9-4028-9a93-7d4b48c437ad",
+      "id": "<REDACTED>",
       "name": "calendarAgent"
     },
     {
       "parameters": {
         "updates": [
-          "message"
+          "<REDACTED>"
         ],
         "additionalFields": {}
       },
@@ -688,12 +688,12 @@
         -16,
         272
       ],
-      "id": "144db326-1a92-4c9d-ba43-2c6120d4bd5d",
+      "id": "<REDACTED>",
       "name": "Telegram Trigger",
-      "webhookId": "d7169ae8-b646-4ed3-aaf6-e42c70e86ddf",
+      "webhookId": "<REDACTED>",
       "credentials": {
         "telegramApi": {
-          "id": "2F9RO4Kjs0q4EF9u",
+          "id": "<REDACTED>",
           "name": "Telegram account"
         }
       }
@@ -709,11 +709,11 @@
         1408,
         544
       ],
-      "id": "b7c688ff-b389-4e30-b396-5711ae832b5f",
+      "id": "<REDACTED>",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "NttQhhm7UNB0B1N8",
+          "id": "<REDACTED>",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -995,6 +995,6 @@
     "templateCredsSetupCompleted": true,
     "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
   },
-  "id": "qJItANDLVdeps1Tu",
+  "id": "<REDACTED>",
   "tags": []
 }
