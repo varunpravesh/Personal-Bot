@@ -1,0 +1,502 @@
+{
+  "name": "Data_Entry",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const today = new Date(); // or use new Date($today) if $today is passed as a string\nconst month = String(today.getMonth() + 1).padStart(2, '0');\nconst year = today.getFullYear();\nreturn {\n  json: {\n    sheetName: `${month}-${year}`\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        240
+      ],
+      "id": "d2de549c-69c3-4172-b84f-1c6cdad8ef5f",
+      "name": "sheetName -  DateExtract"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
+          "mode": "list",
+          "cachedResultName": "ExpenseTracking",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('sheetName -  DateExtract').item.json.sheetName }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.output.Date }}",
+            "Product": "={{ $json.output['Expense Description'] }}",
+            "Category": "={{ $json.output.Category }}",
+            "Sub-category": "={{ $json.output['Sub-category'] }}",
+            "Amount": "={{ $json.output.Amount }}"
+          },
+          "matchingColumns": [
+            "Product"
+          ],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sub-category",
+              "displayName": "Sub-category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1632,
+        112
+      ],
+      "id": "3e295762-d7d4-4226-aa9e-31bfa59a1330",
+      "name": "updateSheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OXvemS2ZQo2R3CDm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
+          "mode": "list",
+          "cachedResultName": "ExpenseTracking",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.sheetName }}",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        480,
+        240
+      ],
+      "id": "cb240466-e37a-4d4a-8417-1a0978881d6e",
+      "name": "getRows()",
+      "executeOnce": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OXvemS2ZQo2R3CDm",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "RCCoVaIwbZKwS01k",
+          "mode": "list",
+          "cachedResultName": "createSpreadsheet"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('sheetName -  DateExtract').item.json.sheetName }}",
+            "ColumnNames": "={{ ['Date','Product','Category','Sub-category','Amount'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "ColumnNames",
+              "displayName": "ColumnNames",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        384
+      ],
+      "id": "13bd8986-6b87-4b65-aa1d-6b4b8d316f40",
+      "name": "createSheet"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Date"
+            },
+            {
+              "name": "UserText",
+              "type": "array"
+            },
+            {
+              "name": "ChatID"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        240
+      ],
+      "id": "f90580cf-8594-41b5-b3fa-09a7b1b5e55a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.UserText }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=## 🧾 Expense Tracking Assistant Guide\n\nYou are an intelligent assistant designed to analyze and classify expense messages. Your task is to extract key details and organize each expense into a suitable Category and Sub-category for reporting and tracking purposes.\n\n---\n\n### 🔍 What You Need to Do\n\nFor each incoming message (like \"Apples 300\" or \"Biriyani 250\"):\n\n1. Extract the following details:\n\n   * Expense Description: The name of the item.\n   * Amount: The numerical value mentioned.\n   * Category: Based on the type of item.\n   * Sub-category: More specific label under the category.\n\n2. Fetch the date from {{ $today }}, and then convert it into the DD-MM-YYYY format. Use this final formatted date when recording the entry.\n\n### 📅 Example Entries\n\n**Input**: Biriyani 250\n\n* Date: 03-06-2025\n* Expense Description: Biriyani\n* Category: Food\n* Sub-category: Biriyani\n* Amount: 250\n\n**Input**: Apples 300\n\n* Date: 03-06-2025\n* Expense Description: Apples\n* Category: Groceries\n* Sub-category: Fruits\n* Amount: 300\n\n---\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        224
+      ],
+      "id": "def47c79-7366-4c45-9df0-54952dd14350",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"Date\": \"05-06-2025\",\n\t\"Expense Description\": \"Biriyani\",\n    \"Category\": \"Food\",\n    \"Sub-category\": \"Biriyani\",\n    \"Amount\":250\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        464
+      ],
+      "id": "5580ff72-4ef0-4374-872e-55d1a54fc3e7",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "UserText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        912,
+        192
+      ],
+      "id": "83bf05de-13af-43fa-9ba6-e2c54f195f74",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e3fa83be-adba-45b8-a859-4ab9e0c6e792",
+              "name": "UserText",
+              "value": "={{ $('When Executed by Another Workflow').item.json.UserText }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        192
+      ],
+      "id": "d7060802-6d5c-4dda-bef1-f0598e3fbdab",
+      "name": "Edit Fields",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "model": "o3-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+      "typeVersion": 1,
+      "position": [
+        832,
+        624
+      ],
+      "id": "85a0efad-1cbe-4e4f-85b4-25d9bbd68e1a",
+      "name": "Azure OpenAI Chat Model",
+      "credentials": {
+        "azureOpenAiApi": {
+          "id": "6H4SB1cfFW6KOCHR",
+          "name": "Azure Open AI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.ChatID }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1264,
+        464
+      ],
+      "id": "b1c043ed-03b0-4a02-a3bf-59740c6fe2e3",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "content": "# Data Entry",
+        "height": 100,
+        "width": 200,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9d80746f-6550-4f16-8b31-2d236722c41a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        464
+      ],
+      "id": "6749f9b9-10fc-4772-8546-9d6e1e008544",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NttQhhm7UNB0B1N8",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "sheetName -  DateExtract": {
+      "main": [
+        [
+          {
+            "node": "getRows()",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getRows()": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "createSheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "createSheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "sheetName -  DateExtract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "updateSheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Azure OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "194d116d-10dd-40d9-9878-be8b63a19388",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
+  },
+  "id": "Cw27gbrx6qeCQGds",
+  "tags": []
+}

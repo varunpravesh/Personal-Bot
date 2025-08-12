@@ -1,0 +1,169 @@
+{
+  "name": "createSpreadsheet",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "create",
+        "documentId": {
+          "__rl": true,
+          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
+          "mode": "list",
+          "cachedResultName": "ExpenseTracking",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+        },
+        "title": "={{ $json.Title }}",
+        "options": {}
+      },
+      "id": "611b433c-6fe8-4c26-bb66-d60d747cda10",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        224,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OXvemS2ZQo2R3CDm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $('Google Sheets').item.json[\"spreadsheetId\"] }}/values/{{ $('When Executed by Another Workflow').item.json.Title }}!A:Z",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "valueInputOption",
+              "value": "RAW"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "range",
+              "value": "={{ $('When Executed by Another Workflow').item.json.Title }}!A:Z"
+            },
+            {
+              "name": "values",
+              "value": "={{ [$json.headers] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0029feac-3f0c-4afb-916b-e0ec94660137",
+      "name": "Update Google Sheet",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        672,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OXvemS2ZQo2R3CDm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "headers",
+              "value": "={{ $('When Executed by Another Workflow').item.json.ColumnNames }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "37f607db-d7ce-4582-88e7-94ac9c75dcb5",
+      "name": "Define headers",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Title"
+            },
+            {
+              "name": "ColumnNames",
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f0c7d358-706e-419d-ac26-ddca46b54f60",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Define headers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Define headers": {
+      "main": [
+        [
+          {
+            "node": "Update Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cdc25c9d-38f9-4acb-a0e9-21fc2987adc9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
+  },
+  "id": "RCCoVaIwbZKwS01k",
+  "tags": []
+}

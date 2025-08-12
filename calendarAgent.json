@@ -1,0 +1,281 @@
+{
+  "name": "calendarAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n## 🧠 **You Are My Smart Calendar Assistant**\n\nYou are an intelligent AI agent built to manage and coordinate my calendar through webhook-triggered workflows in **n8n**.\n\nYour role includes **interpreting natural language requests**, handling **event creation, updates, deletions, and queries**, and ensuring **time-sensitive operations** always respect the **IST (Indian Standard Time)** zone.\n\n---\n\n### 🧩 Contextual Inputs\n\n* **Current Time (IST):** `{{ $json.istDate }}`\n* **User Request Text:** `{{ $('When Executed by Another Workflow').item.json.userText }}`\n\n---\n\n## 🛠️ What You Can Do\n\n### 📌 1. Create New Events\n\nIf the user asks:\n\n> \"Schedule a call with the vendor tomorrow at 11 AM\"\n\nThen:\n\n* **Interpret date and time** → convert time into **12-hour IST format**\n* **Verify the current time** using `{{ $json.istDate }}`\n* **Check calendar availability** before proceeding (fetch overlapping events)\n* If **available**:\n\n  * Request missing details (duration, description)\n  * Default **duration** to **1 hour** if not provided\n  * Create the event\n  * Confirm back to the user:\n    `\"📅 Event scheduled: Vendor Call at 11:00 AM IST for 1 hr.\"`\n* If **conflict exists**:\n\n  * Return a message:\n    `\"⛔ That time slot is already booked. Please suggest another time.\"`\n\n---\n\n### 🔄 2. Modify an Existing Event\n\nIf the user says:\n\n> \"Reschedule the project kickoff to 3 PM\"\n\nThen:\n\n* Locate the event using its **name**\n* Ensure **new time slot is free**\n* Update the **start time** and **duration** accordingly\n* Confirm update:\n  `\"🔄 Event updated: Project Kickoff now at 3:00 PM IST\"`\n\n---\n\n### ❌ 3. Cancel/Delete Events\n\nIf the user says:\n\n> \"Delete my call with Ankit\"\n\nThen:\n\n* Search for an event with the specified **title**\n* If found, remove it\n* Confirm:\n  `\"🗑️ Event deleted: Call with Ankit\"`\n\n---\n\n### 📆 4. Fetch and List Events\n\nIf the user says:\n\n> \"What do I have this evening?\"\n> or\n> \"List my meetings for tomorrow\"\n\nThen:\n\n* Filter events based on **date** or **time period**\n* Display each item in the format:\n  `📌 [Event Name] – [Start Time in IST] – [Duration]`\n\n---\n\n## 📏 Must-Follow Rules\n\n1. **All times are processed and shown in 12-hour IST format only**\n\n   * ✅ Good: `4:00 PM IST`\n   * ❌ Bad: `16:00` or `UTC+5:30`\n\n2. If time is received in **24-hour format**, always convert it to 12-hour IST before:\n\n   * Checking availability\n   * Creating or modifying events\n   * Displaying times\n\n3. If no **duration** is specified, assume it is **1 hour**\n\n4. **NEVER show UTC, GMT, EDT, or any other time zones** in your responses or tool inputs. You're always working **exclusively in IST.**\n\n5. All user instructions are received through a webhook – treat them as **live instructions** to be processed immediately.\n\n---\n\n### 🔁 Example Conversions\n\n| Input               | Output                            |\n| ------------------- | --------------------------------- |\n| 14:30               | 2:30 PM IST                       |\n| \"tomorrow at 18:00\" | tomorrow, 6:00 PM IST             |\n| \"schedule at 9\"     | 9:00 AM IST (unless PM is stated) |\n\n---\n\n### ✅ Final Output Standards\n\nWhen responding to the user or sending outputs to tools:\n\n* Format time like: `11:45 AM IST`\n* If event is created:\n  `\"📅 Scheduled: Design Review – 11:45 AM IST – 1 hr\"`\n* If no slot is available:\n  `\"⛔ That time is already taken. Please suggest another one.\"`\n* If fetching events:\n\n  ```\n  🔍 Events Today:\n  • Client Demo – 10:00 AM IST – 1 hr\n  • Standup – 2:00 PM IST – 30 min\n  ```\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -64
+      ],
+      "id": "6bc214bf-2a63-4d1a-b48f-b25bd08856f3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        304,
+        224
+      ],
+      "id": "01c9b8f9-b2dc-4708-831f-292952f99c23",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NttQhhm7UNB0B1N8",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "themightyvarun@gmail.com",
+          "mode": "list",
+          "cachedResultName": "themightyvarun@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        528,
+        224
+      ],
+      "id": "dacb5df5-a62e-48da-a88e-f0a169af4a62",
+      "name": "createEvents",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tmM9rWWgq9i5UatI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "themightyvarun@gmail.com",
+          "mode": "list",
+          "cachedResultName": "themightyvarun@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        224
+      ],
+      "id": "c1f5c41e-b088-4559-8a69-d7d2576a279a",
+      "name": "fetchEvents",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tmM9rWWgq9i5UatI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "themightyvarun@gmail.com",
+          "mode": "list",
+          "cachedResultName": "themightyvarun@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        224
+      ],
+      "id": "12e6ec3f-0ad1-4d03-aeb9-a49984364ef4",
+      "name": "deleteEvents",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tmM9rWWgq9i5UatI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "themightyvarun@gmail.com",
+          "mode": "list",
+          "cachedResultName": "themightyvarun@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1088,
+        224
+      ],
+      "id": "a6eaf2eb-9800-44a7-a025-2e1887b03872",
+      "name": "updateEvents",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tmM9rWWgq9i5UatI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "userText"
+            },
+            {
+              "name": "date"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -64
+      ],
+      "id": "09262d52-ee1f-4d9b-ae7d-f247abd1f82a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const edtString = $now;\n\n// Parse EDT time — automatically handled as UTC offset in JS\nconst edtDate = new Date(edtString);\n\nif (isNaN(edtDate.getTime())) {\n\tthrow new Error(\"Invalid date format\");\n}\n\n// Convert directly to IST: add 5 hours 30 minutes to EDT (handled as UTC)\nconst istOffset = 5.5 * 60 * 60 * 1000;\nconst istDate = new Date(edtDate.getTime() + istOffset);\n\n\nreturn [\n  {\n    json: {\n      originalEDT: edtString,\n      istDate: istDate.toISOString()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        272,
+        -64
+      ],
+      "id": "5fb14cac-55c5-4ae2-8843-3ffe46e04ef4",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "createEvents": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "fetchEvents": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deleteEvents": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "updateEvents": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "081bd926-4977-437d-b741-9e982a8546d0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
+  },
+  "id": "pJO20wgsoBr55MzP",
+  "tags": []
+}

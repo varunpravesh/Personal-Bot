@@ -1,0 +1,209 @@
+{
+  "name": "Data_Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userRequest }}",
+        "options": {
+          "systemMessage": "=You are a helpful assistant that supports users with their expenditure analysis. Your role is to retrieve the user's spending data using the readData tool and respond to any queries they have about it.\n\nInstructions:\n\nUnderstand the user's request and identify the type of analysis they are seeking.\n\nUse the readData tool to fetch data from the relevant Google Sheet. The sheet name should follow the format MM-YYYY, representing the current month and year. For instance, if the user asks for \"this month's expense report\" on June 6, 2025, the sheet name will be 06-2025.\n\nBased on the user's request, analyze the data and provide only the results—no additional explanation or commentary.\n\ntoday's date : {{ $today }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        272,
+        224
+      ],
+      "id": "c60806fc-2f8e-47e4-b464-e3d52a451c9f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.ChatID }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        448
+      ],
+      "id": "d07999bf-ea2b-41ec-8333-787bd448c0b0",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU",
+          "mode": "list",
+          "cachedResultName": "ExpenseTracking",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-OMhvvcw2W0kvI1IzxZkQgfKuPhz1HEMNd291ownQsU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet', ``, 'string') }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        528,
+        448
+      ],
+      "id": "8fe4371c-18eb-47fc-af21-cb8228d1d1a1",
+      "name": "readSheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OXvemS2ZQo2R3CDm",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "o3-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        448
+      ],
+      "id": "28a1987e-0a26-460c-ae0c-1a430b69b116",
+      "name": "Azure OpenAI Chat Model",
+      "credentials": {
+        "azureOpenAiApi": {
+          "id": "6H4SB1cfFW6KOCHR",
+          "name": "Azure Open AI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "ChatID"
+            },
+            {
+              "name": "userRequest"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        224
+      ],
+      "id": "4a3d0ee9-fa12-43b8-9ef3-26aaf62988d3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "# Data Analysis",
+        "height": 100,
+        "width": 260,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6d1117f0-e881-425e-82c3-52340d11f0a1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        448
+      ],
+      "id": "f5d56e6d-ae98-4fe1-bf9c-6f04f62896ab",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NttQhhm7UNB0B1N8",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readSheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Azure OpenAI Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5338b463-c16a-4c93-9b7b-0399a8b76755",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8d608620218d5109f687c7085c29c921f05c1270d752e35950dfb55c26e36ff4"
+  },
+  "id": "8Ctd3YCnO26jsbKw",
+  "tags": []
+}
